@@ -1,0 +1,37 @@
+@startuml
+'autonumber
+
+actor Trigger as Trigger
+control PriceChangeNotification as PriceChangeNotification
+participant Browsershot as Browsershot
+participant PriceAlertService as PriceAlertService
+database Database as Database
+queue Queue as Queue
+
+Trigger -> PriceChangeNotification : trigger price change check and notifications
+
+PriceChangeNotification -> PriceAlertService : start price change check process
+activate PriceAlertService
+
+== Detecting which emails need to be notified ==
+
+PriceAlertService -> Database : fetch subscribed links and prices
+Database --> PriceAlertService : return links with current prices
+
+loop For each link with a price
+    PriceAlertService -> Browsershot : fetch current price from link
+    Browsershot --> PriceAlertService : return current price
+end
+
+loop Price changed
+    PriceAlertService -> Queue : add email to queue for notification
+end
+
+deactivate PriceAlertService
+
+== Summary and logging ==
+
+PriceAlertService --> PriceChangeNotification : return count of notifications
+PriceChangeNotification --> Trigger : log or display email count
+
+@enduml

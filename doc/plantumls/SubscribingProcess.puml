@@ -1,0 +1,39 @@
+@startuml
+'autonumber
+
+actor User as User
+participant HTMLForm as HTMLForm
+control Controller as Controller
+participant SubscriptionService as SubscriptionService
+participant Browsershot as Browsershot
+database Database as Database
+
+== User Initiates Subscription ==
+
+User -> HTMLForm : Enters email and link, submits form
+HTMLForm -> Controller : POST /subscribe request
+
+== Processing Subscription ==
+
+Controller -> SubscriptionService : Subscribe email to link
+
+alt Price parsing successful
+    SubscriptionService -> Browsershot : Parse price from link
+    Browsershot --> SubscriptionService : Return parsed price
+    SubscriptionService -> Database : Save price, email, and link
+    SubscriptionService --> Controller : Success response
+else Parsing failed
+    SubscriptionService --> Controller : Error response (parsing failed)
+end
+
+== Displaying Result ==
+
+alt Subscription successful
+    Controller -> HTMLForm : Show success message
+    HTMLForm -> User : Display "Successfully subscribed"
+else Subscription failed
+    Controller -> HTMLForm : Show error message
+    HTMLForm -> User : Display error message
+end
+
+@enduml
