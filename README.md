@@ -16,14 +16,6 @@ change is detected.
 
 ## Installation
 
-### Prerequisites
-
-- PHP 8.x
-- Composer
-- Laravel 11.x or later
-- PostgreSQL (or other supported database)
-- Redis (optional, for queue management)
-
 ### Installation Steps
 
 1. **Clone the repository:**
@@ -40,10 +32,6 @@ change is detected.
    docker compose up -d --build
 
 4. **Enter to docker:**
-   ```bash
-   docker compose exec php bash
-
-5. **Enter to docker:**
    ```bash
    docker compose exec php bash
     ```
@@ -95,3 +83,9 @@ Other approaches were considered, including:
 Ultimately, storing prices as strings was selected as it minimizes complexity, reduces dependencies, and allows us to
 handle a variety of price formats directly from the source. This choice enables flexibility and straightforward
 comparisons, which aligns well with our main goal of tracking and notifying price changes.
+
+## Coverage report
+
+Report is in /build/coverage folder.
+Currently, it's about 96.3%
+
